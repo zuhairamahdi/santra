@@ -1,7 +1,22 @@
 use super::mem_manager_type::MemoryManagerType;
 
 
-trait JitMemoryManager {
+pub trait JitMemoryBlock: std::ops::Drop {
+    fn pointer(&self) -> *mut std::ffi::c_void;
+
+    fn commit(&self, offset: u64, size: u64);
+
+    fn map_as_rw(&self, offset: u64, size: u64);
+    fn map_as_rx(&self, offset: u64, size: u64);
+    fn map_as_rwx(&self, offset: u64, size: u64);
+}
+
+pub(crate) trait JitMemoryAllocator {
+    fn allocate(&self, size: u64) -> Box<dyn JitMemoryBlock>;
+    fn reserve(&self, size: u64) -> Box<dyn JitMemoryBlock>;
+}
+
+pub trait JitMemoryManager {
     fn address_space_bits(&self) -> i32;
     fn page_table_pointer(&self) -> *mut std::ffi::c_void;
     fn memory_manager_type(&self) -> MemoryManagerType;

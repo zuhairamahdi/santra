@@ -1,4 +1,5 @@
-use super::{jit_mem_allocator::JitMemoryAllocator, jit_mem_block::JitMemoryBlock};
+use super::{traits::JitMemoryAllocator, traits::JitMemoryBlock};
+
 
 pub struct ReservedRegion {
     block: Box<dyn JitMemoryBlock>,
